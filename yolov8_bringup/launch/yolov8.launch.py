@@ -88,6 +88,7 @@ def generate_launch_description():
             "enable": enable,
             "threshold": threshold,
             "image_reliability": image_reliability,
+            "input_image_topic": input_image_topic
         }],
         remappings=[("image_raw", input_image_topic)]
     )

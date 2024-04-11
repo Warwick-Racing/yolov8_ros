@@ -18,10 +18,10 @@ import numpy as np
 from typing import List, Tuple
 
 import rclpy
-from rclpy.node import Node
-from rclpy.qos import QoSProfile
-from rclpy.qos import QoSHistoryPolicy
-from rclpy.qos import QoSDurabilityPolicy
+# from rclpy.node import Node
+# from rclpy.qos import QoSProfile
+# from rclpy.qos import QoSHistoryPolicy
+# from rclpy.qos import QoSDurabilityPolicy
 from rclpy.qos import QoSReliabilityPolicy
 from rclpy.lifecycle import LifecycleNode
 from rclpy.lifecycle import TransitionCallbackReturn
@@ -70,23 +70,23 @@ class Detect3DNode(LifecycleNode):
             "depth_image_units_divisor").get_parameter_value().integer_value
         dimg_reliability=self.get_parameter(
                 "depth_image_reliability").get_parameter_value().integer_value
-        
-        self.depth_image_qos_profile = QoSProfile(
-            dimg_reliability,
-            history=QoSHistoryPolicy.KEEP_LAST,
-            durability=QoSDurabilityPolicy.VOLATILE,
-            depth=1
-        )
-
         dinfo_reliability=self.get_parameter(
                 "depth_info_reliability").get_parameter_value().integer_value
         
-        self.depth_info_qos_profile = QoSProfile(
-            dinfo_reliability,
-            history=QoSHistoryPolicy.KEEP_LAST,
-            durability=QoSDurabilityPolicy.VOLATILE,
-            depth=1
-        )
+        # self.depth_image_qos_profile = QoSProfile(
+        #     dimg_reliability,
+        #     history=QoSHistoryPolicy.KEEP_LAST,
+        #     durability=QoSDurabilityPolicy.VOLATILE,
+        #     depth=1
+        # )
+
+        # self.depth_info_qos_profile = QoSProfile(
+        #     dinfo_reliability,
+        #     history=QoSHistoryPolicy.KEEP_LAST,
+        #     durability=QoSDurabilityPolicy.VOLATILE,
+        #     depth=1
+        # )
+
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # pubs
@@ -97,11 +97,10 @@ class Detect3DNode(LifecycleNode):
     def on_activate(self, state: LifecycleState) -> TransitionCallbackReturn:
         # subs
         self.depth_sub = message_filters.Subscriber(
-            self, Image, "depth_image",
-            qos_profile=self.depth_image_qos_profile)
+            self, Image, "depth_image")
         self.depth_info_sub = message_filters.Subscriber(
-            self, CameraInfo, "depth_info",
-            qos_profile=self.depth_info_qos_profile)
+            self, CameraInfo, "depth_info"
+            )
         self.detections_sub = message_filters.Subscriber(
             self, DetectionArray, "detections")
 
