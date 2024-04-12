@@ -106,7 +106,8 @@ class Yolov8Node(LifecycleNode):
 
     def on_activate(self, state: LifecycleState) -> TransitionCallbackReturn:
         self.yolo = YOLO(self.model)
-        self.yolo.fuse()
+        if self.model.endswith(".pt"):
+            self.yolo.fuse()
 
         # subs
         self._sub = self.create_subscription(
